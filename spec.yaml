@@ -1,0 +1,491 @@
+openapi: 3.0.3
+info:
+  title: account-book API
+  version: 2.0.0
+servers:
+  - url: http://localhost:8080/
+    description: localhost
+security:
+  - cookieAuth: []
+
+paths:
+  /record:
+    get:
+      summary: 記録を全て取得する
+      tags:
+        - 記録
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: 記録を追加する
+      tags:
+        - 記録
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - amount
+                - category
+                - memo
+                - date
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - Expense
+                    - Income
+                amount:
+                  type: integer
+                category:
+                  $ref: "#/components/schemas/Category"
+                memo:
+                  type: string
+                date:
+                  type: string
+                  format: date
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    
+  /record/{id}:
+    put:
+      summary: 記録を更新する
+      tags:
+        - 記録
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - amount
+                - category
+                - memo
+                - date
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - Expense
+                    - Income
+                amount:
+                  type: integer
+                category:
+                  $ref: "#/components/schemas/Category"
+                memo:
+                  type: string
+                date:
+                  type: string
+                  format: date
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: 記録を削除する
+      tags:
+        - 記録
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: 成功
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  
+  /category:
+    get:
+      summary: カテゴリーを全て取得する
+      tags:
+        - カテゴリー
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: カテゴリーを追加する
+      tags:
+        - カテゴリー
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - color
+              properties:
+                name:
+                  type: string
+                color:
+                  type: string
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  
+  /category/{id}:
+    put:
+      summary: カテゴリーを更新する
+      tags:
+        - カテゴリー
+      parameters:
+        - name: id
+          in : path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - color
+              properties:
+                name:
+                  type: string
+                color:
+                  type: string
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: カテゴリーを削除する
+      tags:
+        - カテゴリー
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: 成功
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+          
+  /user/me:
+    get:
+      summary: ユーザー情報を取得する
+      tags:
+        - ユーザー
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+                
+  /user/create:
+    post:
+      summary: ユーザーを作成する
+      tags:
+        - ユーザー
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        204:
+          description: 成功
+          headers:
+            Set-Cookies:
+              schema:
+                type: string
+              description: account-book_sessionを設定
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+          
+  /user/unique:
+    get:
+      summary: ユーザーIDがユニークかチェックする
+      tags:
+        - ユーザー
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - unique
+                properties:
+                  unique:
+                    type: boolean
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+                    
+  /auth/login:
+    post:
+      summary: ログインする
+      tags: 
+        - 認証
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        204:
+          description: 成功
+          headers:
+            Set-Cookies:
+              schema:
+                type: string
+              description: account-book_sessionを設定
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+          
+  /auth/logout:
+    get:
+      summary: ログアウトする
+      tags:
+        - 認証
+      responses:
+        204:
+          description: 成功
+          headers:
+            Set-Cookies:
+              schema:
+                type: string
+              description: account-book_sessionを削除
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+tags:
+  - name: カテゴリー
+  - name: 記録
+  - name: ユーザー
+  - name: 認証
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - password
+      properties:
+        id:
+          type: string
+        password:
+          type: string
+  
+    Category:
+      type: object
+      required:
+        - id
+        - userId
+        - name
+        - color
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+    
+    Record:
+      type: object
+      required:
+        - id
+        - userId
+        - type
+        - amount
+        - category
+        - memo
+        - date
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - Expense
+            - Income
+        amount:
+          type: integer
+        category:
+          $ref: "#/components/schemas/Category"
+        memo:
+          type: string
+        date:
+          type: string
+          format: date
+
+    Error:
+      type: object
+      required:
+        - message
+        - errors
+      properties:
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+
+  responses:
+    BadRequestError:
+      description: リクエストに問題があった
+      content:
+        application/json:
+          schema:
+            $ref:  "#/components/schemas/Error"
+    UnauthorizedError:
+      description: 未認証
+      content:
+        application/json:
+          schema:
+            $ref:  "#/components/schemas/Error"
+    NotFoundError:
+      description: 指定されたデータが見つからなかった
+      content:
+        application/json:
+          schema:
+            $ref:  "#/components/schemas/Error"
+    InternalServerError:
+      description: サーバー側で問題が発生した
+      content:
+        application/json:
+          schema:
+            $ref:  "#/components/schemas/Error"
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: account-book_session
