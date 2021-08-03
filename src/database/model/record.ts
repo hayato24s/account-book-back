@@ -54,7 +54,7 @@ export class RecordModel {
   })
   date!: string;
 
-  @ManyToOne((type) => CategoryModel, (category) => category.records)
+  @ManyToOne((type) => CategoryModel, (category) => category.records, { onDelete: 'CASCADE' })
   @JoinColumn({ name: "category_id" })
   category!: CategoryModel;
 }
