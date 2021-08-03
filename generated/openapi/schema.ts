@@ -117,6 +117,7 @@ export interface paths {
       requestBody: {
         content: {
           "application/json": {
+            type: components["schemas"]["RecordType"];
             name: string;
             color: string;
           };
@@ -146,6 +147,7 @@ export interface paths {
       requestBody: {
         content: {
           "application/json": {
+            type: components["schemas"]["RecordType"];
             name: string;
             color: string;
           };
@@ -216,7 +218,6 @@ export interface paths {
           };
         };
         400: components["responses"]["BadRequestError"];
-        401: components["responses"]["UnauthorizedError"];
         500: components["responses"]["InternalServerError"];
       };
     };
@@ -258,13 +259,15 @@ export interface components {
     Category: {
       id: string;
       userId: string;
+      type: components["schemas"]["RecordType"];
       name: string;
       color: string;
     };
+    RecordType: "Expense" | "Income";
     Record: {
       id: string;
       userId: string;
-      type: "Expense" | "Income";
+      type: components["schemas"]["RecordType"];
       amount: number;
       category: components["schemas"]["Category"];
       memo: string;
