@@ -1,9 +1,8 @@
+import dayjs from "dayjs";
 import { ISessionRepogitory } from "../interface/ISessionRepogitory";
 
 const sessionName = "account-book_session";
 const sessionLifeTimeHours = 1;
-const expiredAt = new Date(); // セッションの有効期限
-expiredAt.setHours(expiredAt.getHours() + sessionLifeTimeHours);
 
 /**
  * ユーザーIDをもとにセッションを発行する。
@@ -11,6 +10,7 @@ expiredAt.setHours(expiredAt.getHours() + sessionLifeTimeHours);
  * @param userId ユーザーID
  */
 export async function createSession(repo: ISessionRepogitory, userId: string) {
+  const expiredAt = dayjs().add(sessionLifeTimeHours, 'hour');
   const session = await repo.createSession(userId, expiredAt);
   return {
     session,

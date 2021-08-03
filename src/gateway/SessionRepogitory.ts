@@ -1,3 +1,4 @@
+import { Dayjs } from "dayjs";
 import { getRepository, MoreThan, Repository } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { UnauthorizedError } from "~/error";
@@ -11,9 +12,9 @@ export class SessionRepogitory implements ISessionRepogitory {
     this.repo = getRepository(SessionModel);
   }
 
-  async createSession(userId: string, expiredAt: Date) {
+  async createSession(userId: string, expiredAt: Dayjs) {
     return this.repo
-      .save(this.repo.create({ id: uuid(), userId, expiredAt }))
+      .save(this.repo.create({ id: uuid(), userId, expiredAt: expiredAt.toDate() }))
       .then((res) => res.id);
   }
 

@@ -21,7 +21,7 @@ const handler: AuthHandler = {
       );
       return {
         status: 204,
-        cookie: applySessionCookie(session, expiredAt),
+        cookie: applySessionCookie(session, expiredAt.toDate()),
       };
     },
   },
