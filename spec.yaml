@@ -175,9 +175,12 @@ paths:
             schema:
               type: object
               required:
+                - type
                 - name
                 - color
               properties:
+                type:
+                  $ref: "#/components/schemas/RecordType"
                 name:
                   type: string
                 color:
@@ -214,9 +217,12 @@ paths:
             schema:
               type: object
               required:
+                - type
                 - name
                 - color
               properties:
+                type:
+                  $ref: "#/components/schemas/RecordType"
                 name:
                   type: string
                 color:
@@ -400,6 +406,7 @@ components:
       required:
         - id
         - userId
+        - type
         - name
         - color
       properties:
@@ -408,10 +415,18 @@ components:
           format: uuid
         userId:
           type: string
+        type:
+          $ref: "#/components/schemas/RecordType"
         name:
           type: string
         color:
           type: string
+
+    RecordType:
+      type: string
+      enum:
+        - Expense
+        - Income
     
     Record:
       type: object
@@ -431,10 +446,7 @@ components:
           type: string
           format: uuid
         type:
-          type: string
-          enum:
-            - Expense
-            - Income
+          $ref: "#/components/schemas/RecordType"
         amount:
           type: integer
         category:

@@ -23,6 +23,7 @@ export class CategoryRepogitory implements ICategoryRepogitory {
     if (
       !checkObjectHasProperty<Omit<Category, "id">>(c, [
         "userId",
+        "type",
         "name",
         "color",
       ])
@@ -32,7 +33,7 @@ export class CategoryRepogitory implements ICategoryRepogitory {
   }
 
   async updateCategory(c: Category) {
-    if (!checkObjectHasProperty<Category>(c, ["id", "userId", "name", "color"]))
+    if (!checkObjectHasProperty<Category>(c, ["id", "userId", "type", "name", "color"]))
       throw new BadRequestError("カテゴリーの入力データが正しくありません");
     const category = await this.repo.findOne(c.id);
     if (category == undefined)

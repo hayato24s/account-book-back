@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { RecordType } from "~/entity/record";
 import { RecordModel } from "./record";
 
 @Entity({
@@ -20,6 +21,13 @@ export class CategoryModel {
   userId!: string;
 
   @Column({
+    name: "type",
+    type: "enum",
+    enum: ["Expense", "Income"],
+  })
+  type!: RecordType;
+
+  @Column({
     name: "name",
     type: "varchar",
     length: "255",
@@ -29,7 +37,7 @@ export class CategoryModel {
   @Column({
     name: "color",
     type: "char",
-    length: "6",
+    length: "7",
   })
   color!: string;
 
