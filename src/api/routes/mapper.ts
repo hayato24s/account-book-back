@@ -111,6 +111,7 @@ export function mapToExpress<T extends ApiDefinition>(
               const result = await impl[path][method]({
                 body: req.body,
                 params: req.params,
+                query: req.query,
                 // @ts-ignore
                 userId: req.userId,
               });
